@@ -2,13 +2,43 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'Default'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  projectName: "Worker Service"
+  projectFile: 'dotnetcore-workerservice.csproj'
+  projectSolutionFileName: "dotnetcore-workerservice.sln"
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: StageBuild
+    displayName: Build
+    jobs:
+      - job: JobBuildCode
+        displayName: Build Code
+        steps:
+          - task: NuGetInstaller@0
+            displayName: Install Nuget
+          - task: NuGetCommand@2
+            displayName: Restore Nuget
+            inputs:
+              command: 'restore'
+              restoreSolution: $(projectSolutionFileName)
+          - task: SonarQubePrepare@4
+            displayName: SonarQube - Prepare
+            inputs:
+              SonarQube: 'SonarQube'
+              scannerMode: MSBuild
+          - task: DotNetCoreCLI@2
+            displayName: Task - Build Code
+            inputs:
+              command: 'build'
+              projects: '$(projectFile)'
+              arguments: --configuration '$(buildConfiguration)'
+          - task: SonarQubeAnalyze@5
+            displayName: Task - SonarQube - Analysis Start
+          - task: SonarQubePublish@5
+            displayName: Task - SonarQube - Publish Analysis
+            inputs:
+              pollingTimeoutSec: '600'
