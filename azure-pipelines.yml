@@ -6,7 +6,7 @@ pool:
 
 variables:
   solution: '**/*.sln'
-  projectName: "Worker Service"
+  projectName: "dotnetcore-workerservice"
   projectFile: 'dotnetcore-workerservice.csproj'
   projectSolutionFileName: "dotnetcore-workerservice.sln"
   buildPlatform: 'Any CPU'
@@ -29,9 +29,10 @@ stages:
           - task: SonarQubePrepare@5
             displayName: SonarQube - Prepare
             inputs:
-              SonarQube: 'SonarQube'
-              scannerMode: MSBuild
+              SonarQube: 'SonarQube-GitHub'
+              scannerMode: 'MSBuild'
               projectKey: 'GitHub-Project_GitHub-Project'
+              projectName: 'GitHub-Project'
           - task: DotNetCoreCLI@2
             displayName: Task - Build Code
             inputs:
