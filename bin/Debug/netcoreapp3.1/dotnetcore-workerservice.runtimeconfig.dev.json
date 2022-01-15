@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\RDixit\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\RDixit\\.nuget\\packages"
+    ]
+  }
+}
