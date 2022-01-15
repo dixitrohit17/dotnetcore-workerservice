@@ -19,7 +19,7 @@ stages:
       - job: JobBuildCode
         displayName: Build Code
         steps:
-          - task: NuGetInstaller@0
+          - task: NuGetToolInstaller@1
             displayName: Install Nuget
           - task: NuGetCommand@2
             displayName: Restore Nuget
